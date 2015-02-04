@@ -1,6 +1,6 @@
-<?php namespace App\Services;
+<?php namespace Bacchus\Services;
 
-use App\User;
+use Bacchus\User;
 use Validator;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 

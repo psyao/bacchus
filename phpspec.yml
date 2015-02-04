@@ -1,5 +1,5 @@
 suites:
     main:
-        namespace: App
-        psr4_prefix: App
+        namespace: Bacchus
+        psr4_prefix: Bacchus
         src_path: app

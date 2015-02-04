@@ -1,4 +1,4 @@
-<?php namespace App\Commands;
+<?php namespace Bacchus\Commands;
 
 abstract class Command {
 
