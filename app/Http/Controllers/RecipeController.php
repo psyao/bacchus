@@ -1,11 +1,10 @@
 <?php namespace Bacchus\Http\Controllers;
 
-use Bacchus\Http\Requests;
-use Bacchus\Http\Controllers\Controller;
+use Bacchus\Http\Requests\CreateRecipeRequest;
+use Bacchus\Recipe;
 
-use Illuminate\Http\Request;
-
-class RecipeController extends Controller {
+class RecipeController extends Controller
+{
 
 	/**
 	 * Display a listing of the resource.
@@ -24,23 +23,37 @@ class RecipeController extends Controller {
 	 */
 	public function create()
 	{
-		//
+        return view('recipes.create');
 	}
 
 	/**
 	 * Store a newly created resource in storage.
 	 *
-	 * @return Response
+     * @param \Bacchus\Http\Requests\CreateRecipeRequest $request
+     *
+     * @return \Bacchus\Http\Controllers\Response
 	 */
-	public function store()
+    public function store(CreateRecipeRequest $request)
 	{
-		//
+        $recipe = Recipe::create($request->input());
+
+        if ( !isset($recipe->id))
+        {
+            flash()->error("The Recipe could not be saved!");
+
+            return redirect()->back()->withInput();
+        }
+
+        flash()->success("The Recipe has been saved!");
+
+        return redirect()->route('recipes.index');
 	}
 
 	/**
 	 * Display the specified resource.
 	 *
 	 * @param  int  $id
+     *
 	 * @return Response
 	 */
 	public function show($id)
@@ -52,6 +65,7 @@ class RecipeController extends Controller {
 	 * Show the form for editing the specified resource.
 	 *
 	 * @param  int  $id
+     *
 	 * @return Response
 	 */
 	public function edit($id)
@@ -63,6 +77,7 @@ class RecipeController extends Controller {
 	 * Update the specified resource in storage.
 	 *
 	 * @param  int  $id
+     *
 	 * @return Response
 	 */
 	public function update($id)
@@ -74,11 +89,11 @@ class RecipeController extends Controller {
 	 * Remove the specified resource from storage.
 	 *
 	 * @param  int  $id
+     *
 	 * @return Response
 	 */
 	public function destroy($id)
 	{
 		//
 	}
-
 }
