@@ -5,36 +5,39 @@ use Bacchus\Recipe;
 
 class RecipeController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @param \Bacchus\Recipe $recipe
+     *
+     * @return \Bacchus\Http\Controllers\Response
+     */
+    public function index(Recipe $recipe)
+    {
+        $recipes = $recipe->latest()->get();
 
-	/**
-	 * Display a listing of the resource.
-	 *
-	 * @return Response
-	 */
-	public function index()
-	{
-		//
-	}
+        return view('recipes.index', compact('recipes'));
+    }
 
-	/**
-	 * Show the form for creating a new resource.
-	 *
-	 * @return Response
-	 */
-	public function create()
-	{
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return Response
+     */
+    public function create()
+    {
         return view('recipes.create');
-	}
+    }
 
-	/**
-	 * Store a newly created resource in storage.
-	 *
+    /**
+     * Store a newly created resource in storage.
+     *
      * @param \Bacchus\Http\Requests\CreateRecipeRequest $request
      *
      * @return \Bacchus\Http\Controllers\Response
-	 */
+     */
     public function store(CreateRecipeRequest $request)
-	{
+    {
         $recipe = Recipe::create($request->input());
 
         if ( !isset($recipe->id))
@@ -47,53 +50,53 @@ class RecipeController extends Controller
         flash()->success("The Recipe has been saved!");
 
         return redirect()->route('recipes.index');
-	}
+    }
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
+    /**
+     * Display the specified resource.
      *
-	 * @return Response
-	 */
-	public function show($id)
-	{
-		//
-	}
+     * @param \Bacchus\Recipe $recipe
+     *
+     * @return \Bacchus\Http\Controllers\Response
+     */
+    public function show(Recipe $recipe)
+    {
+        return view('recipes.show', compact('recipe'));
+    }
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
+    /**
+     * Show the form for editing the specified resource.
      *
-	 * @return Response
-	 */
-	public function edit($id)
-	{
-		//
-	}
+     * @param  int $id
+     *
+     * @return Response
+     */
+    public function edit($id)
+    {
+        //
+    }
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
+    /**
+     * Update the specified resource in storage.
      *
-	 * @return Response
-	 */
-	public function update($id)
-	{
-		//
-	}
+     * @param  int $id
+     *
+     * @return Response
+     */
+    public function update($id)
+    {
+        //
+    }
 
-	/**
-	 * Remove the specified resource from storage.
-	 *
-	 * @param  int  $id
+    /**
+     * Remove the specified resource from storage.
      *
-	 * @return Response
-	 */
-	public function destroy($id)
-	{
-		//
-	}
+     * @param  int $id
+     *
+     * @return Response
+     */
+    public function destroy($id)
+    {
+        //
+    }
 }
