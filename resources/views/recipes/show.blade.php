@@ -12,7 +12,8 @@
 						<h1>
 							{{ $recipe->name }}
 							@if (Auth::check())
-								{!! link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-primary btn-sm pull-right']) !!}
+								<a class="btn btn-danger btn-sm pull-right" data-toggle="modal" data-target="#delete_recipe_{!! $recipe->id !!}"><i class="fa fa-times"></i> Delete</a>
+								<a class="btn btn-primary btn-sm pull-right" href="{!! route('recipes.edit', [$recipe->id]) !!}"><i class="fa fa-pencil-square-o"></i> Edit</a>
 							@endif
 						</h1>
 
@@ -38,4 +39,8 @@
 		</div>
 	</div>
 </div>
+
+@if (Auth::check())
+	@include('recipes._delete', ['id' => $recipe->id])
+@endif
 @endsection

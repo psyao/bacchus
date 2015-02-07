@@ -12,7 +12,8 @@
 						<li>
 							{!! link_to_route('recipes.show', $recipe->name, [$recipe->id]) !!}
 							@if (Auth::check())
-								{!! link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'pull-right']) !!}
+								<a class="pull-right" data-toggle="modal" data-target="#delete_recipe_{!! $recipe->id !!}"><i class="fa fa-times"></i> Delete</a>
+								<a class="pull-right" href="{!! route('recipes.edit', [$recipe->id]) !!}"><i class="fa fa-pencil-square-o"></i> Edit</a>
 							@endif
 						</li>
 					@endforeach
@@ -21,4 +22,10 @@
 		</div>
 	</div>
 </div>
+
+@if (Auth::check())
+	@foreach($recipes as $recipe)
+		@include('recipes._delete', ['id' => $recipe->id])
+	@endforeach
+@endif
 @endsection

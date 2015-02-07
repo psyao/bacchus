@@ -109,12 +109,22 @@ class RecipeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int $id
+     * @param \Bacchus\Recipe $recipe
      *
-     * @return Response
+     * @throws \Exception
+     * @return \Bacchus\Http\Controllers\Response
      */
-    public function destroy($id)
+    public function destroy(Recipe $recipe)
     {
-        //
+        if ( !$recipe->delete())
+        {
+            flash()->error("The Recipe could not be deleted!");
+
+            return redirect()->back();
+        }
+
+        flash()->success("The Recipe has been deleted!");
+
+        return redirect()->route('recipes.index');
     }
 }
