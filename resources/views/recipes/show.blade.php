@@ -9,7 +9,10 @@
 
 				<div class="panel-body">
 					<article>
-						<h1>{{ $recipe->name }}</h1>
+						<h1>
+							{{ $recipe->name }}
+							{!! link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-primary btn-sm pull-right']) !!}
+						</h1>
 
 						<h2>Informations</h2>
 						<ul>

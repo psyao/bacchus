@@ -11,6 +11,7 @@
 					@foreach($recipes as $recipe)
 						<li>
 							{!! link_to_route('recipes.show', $recipe->name, [$recipe->id]) !!}
+							{!! link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'pull-right']) !!}
 						</li>
 					@endforeach
 				</div>

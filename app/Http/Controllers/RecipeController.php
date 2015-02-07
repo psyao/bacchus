@@ -1,6 +1,6 @@
 <?php namespace Bacchus\Http\Controllers;
 
-use Bacchus\Http\Requests\CreateRecipeRequest;
+use Bacchus\Http\Requests\RecipeRequest;
 use Bacchus\Recipe;
 
 class RecipeController extends Controller
@@ -32,11 +32,11 @@ class RecipeController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param \Bacchus\Http\Requests\CreateRecipeRequest $request
+     * @param \Bacchus\Http\Requests\RecipeRequest $request
      *
      * @return \Bacchus\Http\Controllers\Response
      */
-    public function store(CreateRecipeRequest $request)
+    public function store(RecipeRequest $request)
     {
         $recipe = Recipe::create($request->input());
 
@@ -49,7 +49,7 @@ class RecipeController extends Controller
 
         flash()->success("The Recipe has been saved!");
 
-        return redirect()->route('recipes.index');
+        return redirect()->route('recipes.show', [$recipe->id]);
     }
 
     /**
@@ -67,25 +67,35 @@ class RecipeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int $id
+     * @param \Bacchus\Recipe $recipe
      *
-     * @return Response
+     * @return \Bacchus\Http\Controllers\Response
      */
-    public function edit($id)
+    public function edit(Recipe $recipe)
     {
-        //
+        return view('recipes.edit', compact('recipe'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  int $id
+     * @param \Bacchus\Http\Requests\RecipeRequest $request
+     * @param \Bacchus\Recipe                      $recipe
      *
-     * @return Response
+     * @return \Bacchus\Http\Controllers\Response
      */
-    public function update($id)
+    public function update(RecipeRequest $request, Recipe $recipe)
     {
-        //
+        if ( !$recipe->update($request->input()))
+        {
+            flash()->error("The Recipe could not be updated!");
+
+            return redirect()->back()->withInput();
+        }
+
+        flash()->success("The Recipe has been updated!");
+
+        return redirect()->route('recipes.show', [$recipe->id]);
     }
 
     /**
