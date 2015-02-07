@@ -11,7 +11,9 @@
 					<article>
 						<h1>
 							{{ $recipe->name }}
-							{!! link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-primary btn-sm pull-right']) !!}
+							@if (Auth::check())
+								{!! link_to_route('recipes.edit', 'Edit', [$recipe->id], ['class' => 'btn btn-primary btn-sm pull-right']) !!}
+							@endif
 						</h1>
 
 						<h2>Informations</h2>

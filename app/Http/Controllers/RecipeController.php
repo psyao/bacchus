@@ -6,6 +6,14 @@ use Bacchus\Recipe;
 class RecipeController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+    }
+
+    /**
      * Display a listing of the resource.
      *
      * @param \Bacchus\Recipe $recipe
