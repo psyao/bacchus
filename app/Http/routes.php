@@ -10,4 +10,6 @@ Route::controllers([
     'password' => 'Auth\PasswordController',
 ]);
 
+Route::get('recipes/import', ['as' => 'recipes.import', 'uses' => 'ImportRecipeController@create']);
+Route::post('recipes/import', ['as' => 'recipes.fetch', 'uses' => 'ImportRecipeController@store']);
 Route::resource('recipes', 'RecipeController');

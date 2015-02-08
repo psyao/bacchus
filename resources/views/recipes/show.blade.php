@@ -30,6 +30,10 @@
 							<li>Cost: {{ $recipe->cost }}</li>
 						</ul>
 
+						<ul>
+							<li>Url: {{ $recipe->url }}</li>
+						</ul>
+
 						<h2>Ingredients</h2>
 
 						<h2>Steps</h2>

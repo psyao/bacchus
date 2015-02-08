@@ -23,6 +23,7 @@ class CreateRecipesTable extends Migration {
 			$table->integer('level');
 			$table->integer('guests');
 			$table->integer('cost');
+			$table->string('url')->nullable();
 			$table->timestamps();
 		});
 	}

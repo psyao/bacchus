@@ -9,6 +9,7 @@
                 <ul class="dropdown-menu" role="menu">
                     <li>{!! link_to_route('recipes.index', 'List') !!}</li>
                     <li>{!! link_to_route('recipes.create', 'Add') !!}</li>
+                    <li>{!! link_to_route('recipes.import', 'Import') !!}</li>
                 </ul>
             </li>
         @endif

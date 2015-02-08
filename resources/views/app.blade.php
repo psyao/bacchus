@@ -35,7 +35,13 @@
 		</div>
 	</nav>
 
-	@include('flash::message')
+	<div class="container">
+		<div class="row">
+			<div class="col-md-10 col-md-offset-1">
+				@include('flash::message')
+			</div>
+		</div>
+	</div>
 
 	@yield('content')
 
