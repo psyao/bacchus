@@ -7,7 +7,7 @@ class Recipe extends Model
     /**
      * @var array
      */
-    protected static $levels = [
+    protected static $difficulties = [
         'easy'   => 0,
         'medium' => 1,
         'hard'   => 2
@@ -15,7 +15,7 @@ class Recipe extends Model
     /**
      * @var array
      */
-    protected static $costs = [
+    protected static $prices = [
         'low'    => 0,
         'medium' => 1,
         'high'   => 2
@@ -32,14 +32,14 @@ class Recipe extends Model
      *
      * @return mixed
      */
-    public static function levels($key = null)
+    public static function difficulties($key = null)
     {
         if ( !is_null($key))
         {
-            return array_get(self::$levels, $key, false);
+            return array_get(self::$difficulties, $key, false);
         }
 
-        return self::$levels;
+        return self::$difficulties;
     }
 
     /**
@@ -47,14 +47,14 @@ class Recipe extends Model
      *
      * @return mixed
      */
-    public static function costs($key = null)
+    public static function prices($key = null)
     {
         if ( !is_null($key))
         {
-            return array_get(self::$costs, $key, false);
+            return array_get(self::$prices, $key, false);
         }
 
-        return self::$costs;
+        return self::$prices;
     }
 
     /**

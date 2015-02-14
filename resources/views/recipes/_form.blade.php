@@ -36,14 +36,14 @@
         </div>
     </div>
 
-    <div class="form-group col-sm-4{!! $errors->has('level') ? ' has-error' : '' !!}">
-        {!! Form::label('level', 'Level') !!}
-        {!! Form::select('level', ['Easy', 'Medium', 'Hard'], null, ['class' => 'form-control']) !!}
+    <div class="form-group col-sm-4{!! $errors->has('difficulty') ? ' has-error' : '' !!}">
+        {!! Form::label('difficulty', 'Difficulty') !!}
+        {!! Form::select('difficulty', ['easy', 'medium', 'hard'], null, ['class' => 'form-control']) !!}
     </div>
 
-    <div class="form-group col-sm-4{!! $errors->has('cost') ? ' has-error' : '' !!}">
-        {!! Form::label('cost', 'Cost') !!}
-        {!! Form::select('cost', ['Low', 'Medium', 'High'], null, ['class' => 'form-control']) !!}
+    <div class="form-group col-sm-4{!! $errors->has('price') ? ' has-error' : '' !!}">
+        {!! Form::label('price', 'Proce') !!}
+        {!! Form::select('price', ['low', 'medium', 'high'], null, ['class' => 'form-control']) !!}
     </div>
 
     <div class="form-group col-sm-4{!! $errors->has('guests') ? ' has-error' : '' !!}">

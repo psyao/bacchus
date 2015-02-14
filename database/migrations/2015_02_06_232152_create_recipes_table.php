@@ -17,12 +17,12 @@ class CreateRecipesTable extends Migration {
 			$table->increments('id');
 			$table->string('name');
 			$table->string('slug')->unique();
-			$table->integer('preparation_time');
-			$table->integer('cooking_time');
-			$table->integer('total_time');
-			$table->integer('level');
-			$table->integer('guests');
-			$table->integer('cost');
+			$table->integer('preparation_time')->default(0);
+			$table->integer('cooking_time')->default(0);
+			$table->integer('total_time')->default(0);
+			$table->integer('difficulty')->default(1);
+			$table->integer('guests')->default(4);
+			$table->integer('price')->default(1);
 			$table->string('url')->nullable();
 			$table->timestamps();
 		});

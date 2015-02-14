@@ -72,23 +72,23 @@ class CuisineAZ extends Crawler
     /**
      * @inheritdoc
      */
-    protected function level()
+    protected function difficulty()
     {
-        if ( !isset($this->attributes['level']))
+        if ( !isset($this->attributes['difficulty']))
         {
             // The value is always a string
-            $this->attributes['level'] = $this->evaluateLevelIndex($this->crawler->filter('td.cazicon-difficult')->text());
+            $this->attributes['difficulty'] = $this->evaluateDifficultyIndex($this->crawler->filter('td.cazicon-difficult')->text());
         }
 
-        return $this->attributes['level'];
+        return $this->attributes['difficulty'];
     }
 
     /**
      * @inheritdoc
      */
-    protected function cost()
+    protected function price()
     {
-        if ( !isset($this->attributes['cost']))
+        if ( !isset($this->attributes['price']))
         {
             // The value can be (str) 'Pas cher' or (str) '23,49' converted to (str) '23.49
             $value = $this->crawler->filter('td.cazicon-coutFR')->text();
@@ -96,12 +96,12 @@ class CuisineAZ extends Crawler
             // The comma, if present, is converted to a dot
             $value = str_replace(',', '.', $value);
 
-            $this->attributes['cost'] = is_numeric($value)
+            $this->attributes['price'] = is_numeric($value)
                 ? $this->evaluateNumericCostIndex(intval($value) / $this->guests())
                 : $this->evaluateStringCostIndex($value);
         }
 
-        return $this->attributes['cost'];
+        return $this->attributes['price'];
     }
 
     /**
@@ -114,16 +114,16 @@ class CuisineAZ extends Crawler
         if ($value <= 4)
         {
             // Less or equals to 4€ per guest
-            return Recipe::costs('low');
+            return Recipe::prices('low');
         }
         elseif ($value <= 6)
         {
             // More than 4€ but less than 6€ per guest
-            return Recipe::costs('medium');
+            return Recipe::prices('medium');
         }
 
         // More than 6€
-        return Recipe::costs('high');
+        return Recipe::prices('high');
     }
 
     /**
@@ -136,14 +136,14 @@ class CuisineAZ extends Crawler
         switch ($value)
         {
             case 'Pas cher':
-                $index = Recipe::costs('low');
+                $index = Recipe::prices('low');
                 break;
             case 'Assez cher':
-                $index = Recipe::costs('high');
+                $index = Recipe::prices('high');
                 break;
             case 'Abordable':
             default:
-                $index = Recipe::costs('medium');
+                $index = Recipe::prices('medium');
         }
 
         return $index;
@@ -154,21 +154,21 @@ class CuisineAZ extends Crawler
      *
      * @return mixed
      */
-    protected function evaluateLevelIndex($value)
+    protected function evaluateDifficultyIndex($value)
     {
         switch ($value)
         {
             case 'Facile':
-                $level = Recipe::levels('easy');
+                $difficulty = Recipe::difficulties('easy');
                 break;
             case 'Difficile':
-                $level = Recipe::levels('hard');
+                $difficulty = Recipe::difficulties('hard');
                 break;
             case 'Intermédiaire':
             default:
-                $level = Recipe::levels('medium');
+                $difficulty = Recipe::difficulties('medium');
         }
 
-        return $level;
+        return $difficulty;
     }
 }

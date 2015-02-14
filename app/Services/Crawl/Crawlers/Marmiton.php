@@ -72,63 +72,63 @@ class Marmiton extends Crawler
     /**
      * @inheritdoc
      */
-    protected function level()
+    protected function difficulty()
     {
-        if ( !isset($this->attributes['level']))
+        if ( !isset($this->attributes['difficulty']))
         {
-            $this->extractLevelAndCost();
+            $this->extractDifficultyAndCost();
         }
 
-        return $this->attributes['level'];
+        return $this->attributes['difficulty'];
     }
 
     /**
      * @inheritdoc
      */
-    protected function cost()
+    protected function price()
     {
-        if ( !isset($this->attributes['cost']))
+        if ( !isset($this->attributes['price']))
         {
-            $this->extractLevelAndCost();
+            $this->extractDifficultyAndCost();
         }
 
-        return $this->attributes['cost'];
+        return $this->attributes['price'];
     }
 
     /**
      *
      */
-    protected function extractLevelAndCost()
+    protected function extractDifficultyAndCost()
     {
-        if ( !isset($this->attributes['level']) || !isset($this->attributes['cost']))
+        if ( !isset($this->attributes['difficulty']) || !isset($this->attributes['price']))
         {
-            list($category, $level, $cost) = explode(' - ', $this->string('div.m_content_recette_breadcrumb'));
+            list($category, $difficulty, $price) = explode(' - ', $this->string('div.m_content_recette_breadcrumb'));
 
-            switch ($level)
+            switch ($difficulty)
             {
                 case 'Très facile':
                 case 'Facile':
-                    $this->attributes['level'] = Recipe::levels('easy');
+                    $this->attributes['difficulty'] = Recipe::difficulties('easy');
                     break;
                 case 'Difficile':
-                    $this->attributes['level'] = Recipe::levels('hard');
+                    $this->attributes['difficulty'] = Recipe::difficulties('hard');
                     break;
                 case 'Moyennement difficile':
                 default:
-                    $this->attributes['level'] = Recipe::levels('medium');
+                    $this->attributes['difficulty'] = Recipe::difficulties('medium');
             }
 
-            switch ($cost)
+            switch ($price)
             {
                 case 'Bon marché':
-                    $this->attributes['cost'] = Recipe::costs('low');
+                    $this->attributes['price'] = Recipe::prices('low');
                     break;
                 case 'Assez cher':
-                    $this->attributes['cost'] = Recipe::costs('high');
+                    $this->attributes['price'] = Recipe::prices('high');
                     break;
                 case 'Moyen':
                 default:
-                    $this->attributes['cost'] = Recipe::costs('medium');
+                    $this->attributes['price'] = Recipe::prices('medium');
             }
         }
     }
