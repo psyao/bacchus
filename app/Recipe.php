@@ -7,9 +7,55 @@ class Recipe extends Model
     /**
      * @var array
      */
+    protected static $levels = [
+        'easy'   => 0,
+        'medium' => 1,
+        'hard'   => 2
+    ];
+    /**
+     * @var array
+     */
+    protected static $costs = [
+        'low'    => 0,
+        'medium' => 1,
+        'high'   => 2
+    ];
+    /**
+     * @var array
+     */
     protected $fillable = [
         'name', 'slug', 'preparation_time', 'cooking_time', 'total_time', 'level', 'cost', 'guests', 'url'
     ];
+
+    /**
+     * @param string|null $key
+     *
+     * @return mixed
+     */
+    public static function levels($key = null)
+    {
+        if ( !is_null($key))
+        {
+            return array_get(self::$levels, $key, false);
+        }
+
+        return self::$levels;
+    }
+
+    /**
+     * @param string|null $key
+     *
+     * @return mixed
+     */
+    public static function costs($key = null)
+    {
+        if ( !is_null($key))
+        {
+            return array_get(self::$costs, $key, false);
+        }
+
+        return self::$costs;
+    }
 
     /**
      * @param string $url
@@ -18,11 +64,9 @@ class Recipe extends Model
      */
     public static function import($url)
     {
-        $model = static::buildFromUrl($url);
+        $crawler = app('crawler.factory')->make($url);
 
-        $model->save();
-
-        return $model;
+        return new static($crawler->getAttributes());
     }
 
     /**
@@ -35,13 +79,6 @@ class Recipe extends Model
         $this->slugify();
 
         return parent::save($options);
-    }
-
-    public static function buildFromUrl($url)
-    {
-        $crawler = app('crawler.factory')->make($url);
-
-        return new static($crawler->getAttributes());
     }
 
     /**

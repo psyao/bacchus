@@ -8,15 +8,19 @@
 				<div class="panel-heading">List the Recipes</div>
 
 				<div class="panel-body">
-					@foreach($recipes as $recipe)
-						<li>
-							{!! link_to_route('recipes.show', $recipe->name, [$recipe->id]) !!}
-							@if (Auth::check())
-								<a class="pull-right" data-toggle="modal" data-target="#delete_recipe_{!! $recipe->id !!}"><i class="fa fa-times"></i> Delete</a>
-								<a class="pull-right" href="{!! route('recipes.edit', [$recipe->id]) !!}"><i class="fa fa-pencil-square-o"></i> Edit</a>
-							@endif
-						</li>
-					@endforeach
+					<table class="table">
+						@foreach($recipes as $recipe)
+							<tr>
+								<td>{!! link_to_route('recipes.show', $recipe->name, [$recipe->id]) !!}</td>
+								@if (Auth::check())
+									<td>
+										<a class="btn btn-primary btn-sm" data-toggle="modal" data-target="#delete_recipe_{!! $recipe->id !!}"><i class="fa fa-times"></i></a>
+										<a class="btn btn-danger btn-xs" href="{!! route('recipes.edit', [$recipe->id]) !!}"><i class="fa fa-pencil-square-o"></i></a>
+									</td>
+								@endif
+							</tr>
+						@endforeach
+					</table>
 				</div>
 			</div>
 		</div>

@@ -11,29 +11,24 @@ abstract class Crawler
     /**
      * @var array
      */
-    protected $fillable = [
-        'name', 'preparation_time', 'cooking_time', 'total_time', 'level', 'cost', 'guests'
-    ];
+    protected $fillable = ['name', 'preparation_time', 'cooking_time', 'total_time', 'guests', 'level', 'cost'];
     /**
      * @var array
      */
     protected $attributes = [];
+    /**
+     * @var array
+     */
+    protected $lookup = [];
 
+    /**
+     * @param string $url
+     */
     function __construct($url)
     {
         $this->crawler = (new Client())->request('GET', $url);
 
-        foreach ($this->fillable as $attribute)
-        {
-            $method = camel_case($attribute);
-
-            if (method_exists($this, $method))
-            {
-                $this->attributes[$attribute] = $this->{$method}();
-            }
-        }
-
-        $this->attributes['url'] = $url;
+        $this->setAttributes($url);
     }
 
     /**
@@ -45,7 +40,22 @@ abstract class Crawler
     }
 
     /**
-     * @param $selector
+     * @param string $url
+     */
+    protected function setAttributes($url)
+    {
+        foreach ($this->fillable as $attribute)
+        {
+            $method = camel_case($attribute);
+
+            $this->{$method}();
+        }
+
+        $this->attributes['url'] = $url;
+    }
+
+    /**
+     * @param string $selector
      *
      * @return string
      */
@@ -55,7 +65,7 @@ abstract class Crawler
     }
 
     /**
-     * @param $selector
+     * @param string $selector
      *
      * @return int
      */
@@ -94,15 +104,15 @@ abstract class Crawler
     /**
      * @return int
      */
+    abstract protected function guests();
+
+    /**
+     * @return int
+     */
     abstract protected function level();
 
     /**
      * @return int
      */
     abstract protected function cost();
-
-    /**
-     * @return int
-     */
-    abstract protected function guests();
 }
