@@ -103,6 +103,11 @@ abstract class Crawler
     /**
      * @return int
      */
+    abstract protected function restTime();
+
+    /**
+     * @return int
+     */
     abstract protected function totalTime();
 
     /**

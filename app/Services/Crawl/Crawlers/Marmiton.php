@@ -46,6 +46,14 @@ class Marmiton extends Crawler
     /**
      * @inheritdoc
      */
+    protected function restTime()
+    {
+        return null;
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function totalTime()
     {
         if ( !isset($this->attributes['total_time']))

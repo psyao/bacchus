@@ -46,11 +46,24 @@ class CuisineAZ extends Crawler
     /**
      * @inheritdoc
      */
+    protected function restTime()
+    {
+        if ( !isset($this->attributes['rest_time']))
+        {
+            $this->attributes['rest_time'] = $this->integer('span#ctl00_ContentPlaceHolder_LblRecetteTempsRepos');
+        }
+
+        return $this->attributes['rest_time'];
+    }
+
+    /**
+     * @inheritdoc
+     */
     protected function totalTime()
     {
         if ( !isset($this->attributes['total_time']))
         {
-            $this->attributes['total_time'] = ($this->preparationTime() + $this->cookingTime());
+            $this->attributes['total_time'] = ($this->preparationTime() + $this->cookingTime() + $this->restTime());
         }
 
         return $this->attributes['total_time'];

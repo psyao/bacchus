@@ -23,10 +23,11 @@ class RecipeRequest extends Request
         return [
             'name'             => 'required',
             'slug'             => 'sometimes|unique:recipes,slug',
-            'preparation_time' => 'numeric|between:1,600',
-            'cooking_time'     => 'numeric:min:between:1,600',
-            'total_time'       => 'required|numeric:min:between:1,600',
-            'guests'           => 'required|numeric:min:between:1,20',
+            'preparation_time' => 'numeric|min:1',
+            'cooking_time'     => 'numeric|min:0',
+            'rest_time'        => 'numeric|min:0',
+            'total_time'       => 'required|numeric|min:1',
+            'guests'           => 'required|numeric|min:1',
             'url'              => 'url'
         ];
     }
