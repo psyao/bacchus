@@ -11,7 +11,7 @@ class Marmiton extends Crawler
     {
         if ( !isset($this->attributes['name']))
         {
-            $this->attributes['name'] = $this->string('h1.m_title span.item span.fn');
+            $this->attributes['name'] = $this->text('h1.m_title span.item span.fn');
         }
 
         return $this->attributes['name'];
@@ -110,7 +110,7 @@ class Marmiton extends Crawler
     {
         if ( !isset($this->attributes['difficulty']) || !isset($this->attributes['price']))
         {
-            list($category, $difficulty, $price) = explode(' - ', $this->string('div.m_content_recette_breadcrumb'));
+            list($category, $difficulty, $price) = explode(' - ', $this->text('div.m_content_recette_breadcrumb'));
 
             switch ($difficulty)
             {

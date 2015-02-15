@@ -61,28 +61,76 @@ abstract class Crawler
      *
      * @return string
      */
-    protected function string($selector)
+    protected function text($selector)
     {
-        return $this->crawler->filter($selector)->text();
+        $node = $this->crawler->filter($selector);
+
+        if ( !$node->count())
+        {
+            return null;
+        }
+
+        return strip_tags(str_replace("&nbsp;", " ", htmlentities($node->text(), null, 'utf-8')));
     }
 
     /**
      * @param string $selector
+     * @param bool   $strict
      *
-     * @return int
+     * @return int|string
      */
-    protected function integer($selector)
+    protected function integer($selector, $strict = true)
     {
-        if (ctype_digit($string = $this->string($selector)))
+        $value = $this->text($selector);
+
+        if (is_null($value))
         {
-            return intval($string);
+            var_dump('null');
+
+            return 0;
         }
 
-        $time = str_contains($string, 'h') ? 60 : 1;
+        // The string does not contain number.
+        if ( !preg_match('/\d+/', $value))
+        {
+            if ($strict)
+            {
+                throw new \BadMethodCallException("The selector does not contain a number.");
+            }
+            else
+            {
+                return $value;
+            }
+        }
 
-        preg_match_all('/\d+/', $string, $matches);
+        // The string is an integer. Example: "1337".
+        if (ctype_digit($value))
+        {
+            return intval($value);
+        }
 
-        return intval($matches[0][0]) * $time;
+        // The string contains hours. Example: "3 heures" returns 180.
+        if (preg_match('/(\d+) *h[A-z]* *(\d+)?/i', $value, $hours))
+        {
+            $hour    = intval($hours[1]);
+            $minutes = isset($hours[2]) ? intval($hours[2]) : 0;
+
+            return $hour * 60 + $minutes;
+        }
+
+        // The string contains seconds. Example: "30 secondes" returns 30.
+        if (preg_match('/(\d+)[ ]*s/i', $value, $seconds))
+        {
+            return max(intval($seconds[1]) / 60, 1);
+        }
+
+        // The string contains a least a number. Example: "15.6$" returns 15 or "€ 34,99" returns 34.
+        if (preg_match('/(\d*[.|,]?\d+)/', $value, $numbers))
+        {
+            return intval($numbers[1]);
+        }
+
+        return intval($value);
     }
 
     /**

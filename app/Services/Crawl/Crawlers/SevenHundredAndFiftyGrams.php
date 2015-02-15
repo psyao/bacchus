@@ -11,7 +11,7 @@ class SevenHundredAndFiftyGrams extends Crawler
     {
         if ( !isset($this->attributes['name']))
         {
-            $this->attributes['name'] = $this->string('section.recette_titre h1.fn');
+            $this->attributes['name'] = $this->text('section.recette_titre h1.fn');
         }
 
         return $this->attributes['name'];
@@ -71,7 +71,7 @@ class SevenHundredAndFiftyGrams extends Crawler
     {
         if ( !isset($this->attributes['guests']))
         {
-            $this->attributes['guests'] = $this->integer('section.recette_infos.row > div:nth-child(2) > p:nth-child(2) > span.yield');
+            $this->attributes['guests'] = $this->integer('section.recette_infos span.yield');
         }
 
         return $this->attributes['guests'];
@@ -84,7 +84,7 @@ class SevenHundredAndFiftyGrams extends Crawler
     {
         if ( !isset($this->attributes['difficulty']))
         {
-            switch ($this->string('section.recette_infos > div:nth-child(2) > p:nth-child(3) > span:nth-child(2)'))
+            switch ($this->text('section.recette_infos > div:nth-child(2) > p:nth-child(3) > span:nth-child(2)'))
             {
                 case 'très facile':
                 case 'facile':

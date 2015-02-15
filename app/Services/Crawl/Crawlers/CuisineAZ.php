@@ -11,7 +11,7 @@ class CuisineAZ extends Crawler
     {
         if ( !isset($this->attributes['name']))
         {
-            $this->attributes['name'] = $this->string('h1.recetteH1');
+            $this->attributes['name'] = $this->text('h1.recetteH1');
         }
 
         return $this->attributes['name'];
@@ -24,7 +24,7 @@ class CuisineAZ extends Crawler
     {
         if ( !isset($this->attributes['preparation_time']))
         {
-            $this->attributes['preparation_time'] = $this->integer('span#ctl00_ContentPlaceHolder_LblRecetteTempsPrepa');
+            $this->attributes['preparation_time'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteTempsPrepa');
         }
 
         return $this->attributes['preparation_time'];
@@ -37,7 +37,7 @@ class CuisineAZ extends Crawler
     {
         if ( !isset($this->attributes['cooking_time']))
         {
-            $this->attributes['cooking_time'] = $this->integer('span#ctl00_ContentPlaceHolder_LblRecetteTempsCuisson');
+            $this->attributes['cooking_time'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteTempsCuisson');
         }
 
         return $this->attributes['cooking_time'];
@@ -50,7 +50,7 @@ class CuisineAZ extends Crawler
     {
         if ( !isset($this->attributes['rest_time']))
         {
-            $this->attributes['rest_time'] = $this->integer('span#ctl00_ContentPlaceHolder_LblRecetteTempsRepos');
+            $this->attributes['rest_time'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteTempsRepos');
         }
 
         return $this->attributes['rest_time'];
@@ -76,7 +76,7 @@ class CuisineAZ extends Crawler
     {
         if ( !isset($this->attributes['guests']))
         {
-            $this->attributes['guests'] = $this->integer('span#ctl00_ContentPlaceHolder_LblRecetteNombre');
+            $this->attributes['guests'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteNombre');
         }
 
         return $this->attributes['guests'];
@@ -90,7 +90,7 @@ class CuisineAZ extends Crawler
         if ( !isset($this->attributes['difficulty']))
         {
             // The value is always a string
-            $this->attributes['difficulty'] = $this->evaluateDifficultyIndex($this->crawler->filter('td.cazicon-difficult')->text());
+            $this->attributes['difficulty'] = $this->getDifficultyIndex($this->text('td.cazicon-difficult'));
         }
 
         return $this->attributes['difficulty'];
@@ -103,18 +103,20 @@ class CuisineAZ extends Crawler
     {
         if ( !isset($this->attributes['price']))
         {
-            // The value can be (str) 'Pas cher' or (str) '23,49' converted to (str) '23.49
-            $value = $this->crawler->filter('td.cazicon-coutFR')->text();
-
-            // The comma, if present, is converted to a dot
-            $value = str_replace(',', '.', $value);
-
-            $this->attributes['price'] = is_numeric($value)
-                ? $this->evaluateNumericCostIndex(intval($value) / $this->guests())
-                : $this->evaluateStringCostIndex($value);
+            $this->attributes['price'] = $this->getPriceIndex($this->integer('td.cazicon-coutFR', false));
         }
 
         return $this->attributes['price'];
+    }
+
+    /**
+     * @param int|string $value
+     *
+     * @return int
+     */
+    protected function getPriceIndex($value)
+    {
+        return is_int($value) ? $this->evaluateNumericPriceIndex($value) : $this->evaluateTextPriceIndex($value);
     }
 
     /**
@@ -122,8 +124,10 @@ class CuisineAZ extends Crawler
      *
      * @return int
      */
-    protected function evaluateNumericCostIndex($value)
+    protected function evaluateNumericPriceIndex($value)
     {
+        $value /= $this->guests();
+
         if ($value <= 6)
         {
             // Less or equals to 4€ per guest
@@ -144,7 +148,7 @@ class CuisineAZ extends Crawler
      *
      * @return int
      */
-    protected function evaluateStringCostIndex($value)
+    protected function evaluateTextPriceIndex($value)
     {
         switch ($value)
         {
@@ -167,7 +171,7 @@ class CuisineAZ extends Crawler
      *
      * @return mixed
      */
-    protected function evaluateDifficultyIndex($value)
+    protected function getDifficultyIndex($value)
     {
         switch ($value)
         {
