@@ -111,12 +111,12 @@ class CuisineAZ extends Crawler
      */
     protected function evaluateNumericCostIndex($value)
     {
-        if ($value <= 4)
+        if ($value <= 6)
         {
             // Less or equals to 4€ per guest
             return Recipe::prices('low');
         }
-        elseif ($value <= 6)
+        elseif ($value <= 9)
         {
             // More than 4€ but less than 6€ per guest
             return Recipe::prices('medium');

@@ -11,7 +11,9 @@ abstract class Crawler
     /**
      * @var array
      */
-    protected $fillable = ['name', 'preparation_time', 'cooking_time', 'total_time', 'guests', 'difficulty', 'price'];
+    protected $fillable = [
+        'name', 'preparation_time', 'cooking_time', 'rest_time', 'total_time', 'guests', 'difficulty', 'price'
+    ];
     /**
      * @var array
      */
@@ -76,9 +78,11 @@ abstract class Crawler
             return intval($string);
         }
 
+        $time = str_contains($string, 'h') ? 60 : 1;
+
         preg_match_all('/\d+/', $this->string($selector), $matches);
 
-        return intval($matches[0][0]);
+        return intval($matches[0][0]) * $time;
     }
 
     /**
