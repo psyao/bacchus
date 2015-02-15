@@ -80,7 +80,7 @@ abstract class Crawler
 
         $time = str_contains($string, 'h') ? 60 : 1;
 
-        preg_match_all('/\d+/', $this->string($selector), $matches);
+        preg_match_all('/\d+/', $string, $matches);
 
         return intval($matches[0][0]) * $time;
     }
