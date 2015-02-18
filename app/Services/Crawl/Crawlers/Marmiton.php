@@ -104,6 +104,31 @@ class Marmiton extends Crawler
     }
 
     /**
+     * @return array
+     */
+    protected function ingredients()
+    {
+        if ( !isset($this->attributes['ingredients']))
+        {
+            $ingredients = [];
+
+            $items = preg_split('/<br>|\n/', $this->crawler->filter('p.m_content_recette_ingredients')->html());
+
+            foreach ($items as $index => &$ingredient)
+            {
+                if (starts_with($ingredient, '- '))
+                {
+                    $ingredients[]['body'] = strip_tags(str_replace('- ', '', trim($ingredient)));
+                }
+            }
+
+            $this->attributes['ingredients'] = $ingredients;
+        }
+
+        return $this->attributes['ingredients'];
+    }
+
+    /**
      *
      */
     protected function extractDifficultyAndCost()

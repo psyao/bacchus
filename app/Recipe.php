@@ -58,15 +58,49 @@ class Recipe extends Model
     }
 
     /**
-     * @param string $url
+     * @param array $attributes
      *
      * @return static
      */
-    public static function import($url)
+    public static function create(array $attributes)
     {
-        $crawler = app('crawler.factory')->make($url);
+        $created = parent::create($attributes);
 
-        return new static($crawler->getAttributes());
+        if ($created && isset($attributes['ingredients']))
+        {
+            $created->persistIngredients($attributes['ingredients']);
+        }
+
+        return $created;
+    }
+
+    /**
+     * @param $url
+     *
+     * @return \Bacchus\Recipe
+     */
+    public function import($url)
+    {
+        $attributes = app('crawler.factory')->make($url)->getAttributes();
+
+        return static::create($attributes);
+    }
+
+    /**
+     * @param array $attributes
+     *
+     * @return bool|int
+     */
+    public function update(array $attributes = [])
+    {
+        $updated = parent::update($attributes);
+
+        if ($updated && isset($attributes['ingredients']))
+        {
+            $updated->persistIngredients($attributes['ingredients']);
+        }
+
+        return $updated;
     }
 
     /**
@@ -79,6 +113,34 @@ class Recipe extends Model
         $this->slugify();
 
         return parent::save($options);
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function ingredients()
+    {
+        return $this->hasMany('Bacchus\Ingredient');
+    }
+
+    /**
+     * @param array $ingredients
+     */
+    protected function persistIngredients(array $ingredients)
+    {
+        if ($this->exists)
+        {
+            foreach ($this->ingredients as $ingredient)
+            {
+                isset($ingredients[$ingredient->id])
+                    ? $ingredient->update(array_pull($ingredients, $ingredient->id))
+                    : $ingredient->delete();
+            }
+        }
+        foreach ($ingredients as $attributes)
+        {
+            $this->ingredients()->save(new Ingredient($attributes));
+        }
     }
 
     /**

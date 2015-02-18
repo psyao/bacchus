@@ -1,5 +1,6 @@
 <?php namespace Bacchus\Http\Controllers;
 
+use Bacchus\Http\Requests\ImportRecipeRequest;
 use Bacchus\Http\Requests\RecipeRequest;
 use Bacchus\Recipe;
 
@@ -56,6 +57,40 @@ class RecipeController extends Controller
         }
 
         flash()->success("The Recipe has been saved!");
+
+        return redirect()->route('recipes.show', [$recipe->id]);
+    }
+
+    /**
+     * Show the form for importing a new resource.
+     *
+     * @return Response
+     */
+    public function provide()
+    {
+        return view('recipes.import');
+    }
+
+    /**
+     * Import a newly created resource in storage.
+     *
+     * @param \Bacchus\Http\Requests\ImportRecipeRequest $request
+     * @param \Bacchus\Recipe                            $recipe
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function import(ImportRecipeRequest $request, Recipe $recipe)
+    {
+        $recipe = $recipe->import($request->input('url'));
+
+        if ( !isset($recipe->id))
+        {
+            flash()->error("The Recipe could not be imported!");
+
+            return redirect()->back()->withInput();
+        }
+
+        flash()->success("The Recipe has been imported!");
 
         return redirect()->route('recipes.show', [$recipe->id]);
     }

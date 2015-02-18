@@ -1,4 +1,4 @@
-@extends('app')
+@extends('......app')
 
 @section('content')
 <div class="container">
@@ -8,7 +8,7 @@
 				<div class="panel-heading">Import a Recipe</div>
 
 				<div class="panel-body">
-					{!! Form::open(['route' => 'recipes.fetch']) !!}
+					{!! Form::open(['route' => 'recipes.import']) !!}
 						@if ($errors->any())
                             <ul class="alert alert-danger">
                                 @foreach($errors->all() as $error)

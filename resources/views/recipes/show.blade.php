@@ -20,14 +20,15 @@
 						<h2>Informations</h2>
 						<ul>
 							<li>Preparation: {{ $recipe->preparation_time }} minutes</li>
-							<li>Cooking: {{ $recipe->cooking_time }} minutes</li>
+							<li>Cooking: {{ $recipe->cooking_time or 'N/A' }} minutes</li>
+							<li>Rest: {{ $recipe->rest_time or 'N/A' }} minutes</li>
 							<li>Total: {{ $recipe->total_time }} minutes</li>
 						</ul>
 
 						<ul>
-							<li>Level: {{ $recipe->level }}</li>
+							<li>Difficulty: {{ array_search($recipe->difficulty, \Bacchus\Recipe::difficulties()) }}</li>
 							<li>Guests: {{ $recipe->guests }} persons</li>
-							<li>Cost: {{ $recipe->cost }}</li>
+							<li>Price: {{ array_search($recipe->price, \Bacchus\Recipe::prices()) }}</li>
 						</ul>
 
 						<ul>
@@ -35,6 +36,12 @@
 						</ul>
 
 						<h2>Ingredients</h2>
+
+						<ul>
+							@foreach($recipe->ingredients as $ingredient)
+								<li>{{ ucfirst($ingredient->body) }}</li>
+							@endforeach
+						</ul>
 
 						<h2>Steps</h2>
 					</article>

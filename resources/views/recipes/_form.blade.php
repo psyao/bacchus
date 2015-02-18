@@ -64,7 +64,21 @@
         {!! Form::input('url', 'url', null, ['class' => 'form-control', 'placeholder' => 'http://']); !!}
     </div>
 
-
+    @if (isset($recipe))
+        @foreach($recipe->ingredients as $ingredient)
+            <div class="form-group col-sm-6{!! $errors->has('ingredients[name]') ? ' has-error' : '' !!}">
+                {!! Form::label('ingredients[body]', 'Ingredient') !!}
+                {!! Form::text('ingredients[' . $ingredient->id . '][body]', $ingredient->body, ['class' => 'form-control']); !!}
+            </div>
+        @endforeach
+    @else
+        @for ($i = 0; $i < 5; $i++)
+            <div class="form-group col-sm-6{!! $errors->has('ingredients[name]') ? ' has-error' : '' !!}">
+                {!! Form::label('ingredients[body]', 'Ingredient') !!}
+                {!! Form::text('ingredients[\'new' . $i . '\'][body]', null, ['class' => 'form-control']); !!}
+            </div>
+        @endfor
+    @endif
 
     <div class="form-group col-xs-12">
         {!! Form::submit(isset($submitButtonText) ? $submitButtonText : 'Add Recipe', ['class' => 'btn btn-primary btn-block btn-lg']) !!}
