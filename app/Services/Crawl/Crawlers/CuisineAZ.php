@@ -110,6 +110,29 @@ class CuisineAZ extends Crawler
     }
 
     /**
+     * @return array
+     */
+    protected function ingredients()
+    {
+        if ( !isset($this->attributes['ingredients']))
+        {
+            $ingredients = [];
+
+            $nodes = $this->crawler->filter('#ingredients > ul > li.ingredient > span');
+
+            $nodes->each(function ($node, $i) use (&$ingredients)
+            {
+                $text = explode(' : ', trim($node->text()));
+                $ingredients[]['body'] = strip_tags(trim(implode(' ', array_reverse($text))));
+            });
+
+            $this->attributes['ingredients'] = $ingredients;
+        }
+
+        return $this->attributes['ingredients'];
+    }
+
+    /**
      * @param int|string $value
      *
      * @return int
