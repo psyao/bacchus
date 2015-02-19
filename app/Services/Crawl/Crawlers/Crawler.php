@@ -12,12 +12,9 @@ abstract class Crawler
      * @var array
      */
     protected $fillable = [
-        'name',
-        'preparation_time', 'cooking_time', 'rest_time', 'total_time',
-        'guests',
-        'difficulty',
-        'price',
-        'ingredients'
+        'name', 'preparation_time', 'cooking_time', 'rest_time', 'total_time', 'guests', 'difficulty', 'price',
+        'ingredients',
+        'steps'
     ];
     /**
      * @var array
@@ -182,4 +179,9 @@ abstract class Crawler
      * @return array
      */
     abstract protected function ingredients();
+
+    /**
+     * @return array
+     */
+    abstract protected function steps();
 }

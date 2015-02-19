@@ -71,11 +71,25 @@
                 {!! Form::text('ingredients[' . $ingredient->id . '][body]', $ingredient->body, ['class' => 'form-control']); !!}
             </div>
         @endforeach
+
+        @foreach($recipe->steps as $step)
+            <div class="form-group col-xs-12{!! $errors->has('steps[name]') ? ' has-error' : '' !!}">
+                {!! Form::label('steps[body]', 'Step ' . $step->position) !!}
+                {!! Form::textarea('steps[' . $step->id . '][body]', $step->body, ['class' => 'form-control', 'rows' => 2]); !!}
+            </div>
+        @endforeach
     @else
         @for ($i = 0; $i < 5; $i++)
             <div class="form-group col-sm-6{!! $errors->has('ingredients[name]') ? ' has-error' : '' !!}">
                 {!! Form::label('ingredients[body]', 'Ingredient') !!}
                 {!! Form::text('ingredients[\'new' . $i . '\'][body]', null, ['class' => 'form-control']); !!}
+            </div>
+        @endfor
+
+        @for ($i = 0; $i < 5; $i++)
+            <div class="form-group col-xs-12{!! $errors->has('steps[name]') ? ' has-error' : '' !!}">
+                {!! Form::label('steps[body]', 'Steps') !!}
+                {!! Form::textarea('steps[\'new' . $i . '\'][body]', null, ['class' => 'form-control', 'rows' => 2]); !!}
             </div>
         @endfor
     @endif

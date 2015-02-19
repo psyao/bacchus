@@ -68,7 +68,8 @@ class Recipe extends Model
 
         if ($created && isset($attributes['ingredients']))
         {
-            $created->persistIngredients($attributes['ingredients']);
+            $created->persistIngredients($attributes['ingredients'])
+                    ->persistSteps($attributes['steps']);
         }
 
         return $created;
@@ -97,7 +98,8 @@ class Recipe extends Model
 
         if ($updated && isset($attributes['ingredients']))
         {
-            $updated->persistIngredients($attributes['ingredients']);
+            $updated->persistIngredients($attributes['ingredients'])
+                    ->persistSteps($attributes['steps']);
         }
 
         return $updated;
@@ -124,7 +126,17 @@ class Recipe extends Model
     }
 
     /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function steps()
+    {
+        return $this->hasMany('Bacchus\Step');
+    }
+
+    /**
      * @param array $ingredients
+     *
+     * @return $this
      */
     protected function persistIngredients(array $ingredients)
     {
@@ -137,10 +149,44 @@ class Recipe extends Model
                     : $ingredient->delete();
             }
         }
+
         foreach ($ingredients as $attributes)
         {
-            $this->ingredients()->save(new Ingredient($attributes));
+            if ( !empty($attributes['body']))
+            {
+                $this->ingredients()->save(new Ingredient($attributes));
+            }
         }
+
+        return $this;
+    }
+
+    /**
+     * @param array $steps
+     *
+     * @return $this
+     */
+    protected function persistSteps(array $steps)
+    {
+        if ($this->exists)
+        {
+            foreach ($this->steps as $step)
+            {
+                isset($steps[$step->id])
+                    ? $step->update(array_pull($steps, $step->id))
+                    : $step->delete();
+            }
+        }
+
+        foreach ($steps as $attributes)
+        {
+            if ( !empty($attributes['body']))
+            {
+                $this->steps()->save(new Step($attributes));
+            }
+        }
+
+        return $this;
     }
 
     /**

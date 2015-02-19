@@ -104,7 +104,7 @@ class Marmiton extends Crawler
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     protected function ingredients()
     {
@@ -126,6 +126,39 @@ class Marmiton extends Crawler
         }
 
         return $this->attributes['ingredients'];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function steps()
+    {
+        if ( !isset($this->attributes['steps']))
+        {
+            $steps = [];
+
+            $items = preg_split('/<br><br>/', $this->crawler->filter('div.m_content_recette_todo')->html());
+
+            array_pop($items);
+
+            foreach ($items as $index => &$step)
+            {
+                if ($index == 0)
+                {
+                    $step = explode("\n", $step);
+                    $step = array_pop($step);
+                }
+
+                if ( !empty($step))
+                {
+                    $steps[]['body'] = strip_tags(trim($step));
+                }
+            }
+
+            $this->attributes['steps'] = $steps;
+        }
+
+        return $this->attributes['steps'];
     }
 
     /**

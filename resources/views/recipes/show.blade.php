@@ -44,6 +44,12 @@
 						</ul>
 
 						<h2>Steps</h2>
+
+						<ol>
+							@foreach($recipe->steps as $step)
+								<li>{{ ucfirst($step->body) }}</li>
+							@endforeach
+						</ol>
 					</article>
 				</div>
 			</div>
