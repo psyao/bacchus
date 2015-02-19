@@ -113,4 +113,26 @@ class JournalDesFemmes extends Crawler
     {
         return Recipe::prices('medium');
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function ingredients()
+    {
+        if ( !isset($this->attributes['ingredients']))
+        {
+            $ingredients = [];
+
+            $nodes = $this->crawler->filter('div.hrecipe > article.bu_cuisine_main_recipe li.ingredient');
+
+            $nodes->each(function ($node, $i) use (&$ingredients)
+            {
+                $ingredients[]['body'] = trim($node->text());
+            });
+
+            $this->attributes['ingredients'] = $ingredients;
+        }
+
+        return $this->attributes['ingredients'];
+    }
 }
