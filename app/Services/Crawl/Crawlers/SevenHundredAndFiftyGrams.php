@@ -129,4 +129,26 @@ class SevenHundredAndFiftyGrams extends Crawler
 
         return $this->attributes['price'];
     }
+
+    /**
+     * @inheritdoc
+     */
+    protected function ingredients()
+    {
+        if ( !isset($this->attributes['ingredients']))
+        {
+            $ingredients = [];
+
+            $nodes = $this->crawler->filter('section.recette_ingredients li');
+
+            $nodes->each(function ($node, $i) use (&$ingredients)
+            {
+                $ingredients[]['body'] = trim($node->text());
+            });
+
+            $this->attributes['ingredients'] = $ingredients;
+        }
+
+        return $this->attributes['ingredients'];
+    }
 }
