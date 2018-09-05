@@ -9,8 +9,7 @@ class Marmiton extends Crawler
      */
     protected function name()
     {
-        if ( !isset($this->attributes['name']))
-        {
+        if (!isset($this->attributes['name'])) {
             $this->attributes['name'] = $this->text('h1.m_title span.item span.fn');
         }
 
@@ -22,8 +21,7 @@ class Marmiton extends Crawler
      */
     protected function preparationTime()
     {
-        if ( !isset($this->attributes['preparation_time']))
-        {
+        if (!isset($this->attributes['preparation_time'])) {
             $this->attributes['preparation_time'] = $this->integer('p.m_content_recette_info span.preptime');
         }
 
@@ -35,8 +33,7 @@ class Marmiton extends Crawler
      */
     protected function cookingTime()
     {
-        if ( !isset($this->attributes['cooking_time']))
-        {
+        if (!isset($this->attributes['cooking_time'])) {
             $this->attributes['cooking_time'] = $this->integer('p.m_content_recette_info span.cooktime');
         }
 
@@ -56,8 +53,7 @@ class Marmiton extends Crawler
      */
     protected function totalTime()
     {
-        if ( !isset($this->attributes['total_time']))
-        {
+        if (!isset($this->attributes['total_time'])) {
             $this->attributes['total_time'] = ($this->preparationTime() + $this->cookingTime());
         }
 
@@ -69,8 +65,7 @@ class Marmiton extends Crawler
      */
     protected function guests()
     {
-        if ( !isset($this->attributes['guests']))
-        {
+        if (!isset($this->attributes['guests'])) {
             $this->attributes['guests'] = $this->integer('p.m_content_recette_ingredients span');
         }
 
@@ -82,8 +77,7 @@ class Marmiton extends Crawler
      */
     protected function difficulty()
     {
-        if ( !isset($this->attributes['difficulty']))
-        {
+        if (!isset($this->attributes['difficulty'])) {
             $this->extractDifficultyAndCost();
         }
 
@@ -95,8 +89,7 @@ class Marmiton extends Crawler
      */
     protected function price()
     {
-        if ( !isset($this->attributes['price']))
-        {
+        if (!isset($this->attributes['price'])) {
             $this->extractDifficultyAndCost();
         }
 
@@ -108,16 +101,13 @@ class Marmiton extends Crawler
      */
     protected function ingredients()
     {
-        if ( !isset($this->attributes['ingredients']))
-        {
+        if (!isset($this->attributes['ingredients'])) {
             $ingredients = [];
 
             $items = preg_split('/<br>|\n/', $this->crawler->filter('p.m_content_recette_ingredients')->html());
 
-            foreach ($items as $index => &$ingredient)
-            {
-                if (starts_with($ingredient, '- '))
-                {
+            foreach ($items as $index => &$ingredient) {
+                if (starts_with($ingredient, '- ')) {
                     $ingredients[]['body'] = strip_tags(str_replace('- ', '', trim($ingredient)));
                 }
             }
@@ -133,24 +123,20 @@ class Marmiton extends Crawler
      */
     protected function steps()
     {
-        if ( !isset($this->attributes['steps']))
-        {
+        if (!isset($this->attributes['steps'])) {
             $steps = [];
 
             $items = preg_split('/<br><br>/', $this->crawler->filter('div.m_content_recette_todo')->html());
 
             array_pop($items);
 
-            foreach ($items as $index => &$step)
-            {
-                if ($index == 0)
-                {
+            foreach ($items as $index => &$step) {
+                if ($index == 0) {
                     $step = explode("\n", $step);
                     $step = array_pop($step);
                 }
 
-                if ( !empty($step))
-                {
+                if (!empty($step)) {
                     $steps[]['body'] = strip_tags(trim($step));
                 }
             }
@@ -166,12 +152,10 @@ class Marmiton extends Crawler
      */
     protected function extractDifficultyAndCost()
     {
-        if ( !isset($this->attributes['difficulty']) || !isset($this->attributes['price']))
-        {
+        if (!isset($this->attributes['difficulty']) || !isset($this->attributes['price'])) {
             list($category, $difficulty, $price) = explode(' - ', $this->text('div.m_content_recette_breadcrumb'));
 
-            switch ($difficulty)
-            {
+            switch ($difficulty) {
                 case 'Très facile':
                 case 'Facile':
                     $this->attributes['difficulty'] = Recipe::difficulties('easy');
@@ -184,8 +168,7 @@ class Marmiton extends Crawler
                     $this->attributes['difficulty'] = Recipe::difficulties('medium');
             }
 
-            switch ($price)
-            {
+            switch ($price) {
                 case 'Bon marché':
                     $this->attributes['price'] = Recipe::prices('low');
                     break;

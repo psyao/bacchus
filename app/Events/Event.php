@@ -1,7 +1,7 @@
 <?php namespace Bacchus\Events;
 
-abstract class Event {
+abstract class Event
+{
 
-	//
-
+    //
 }

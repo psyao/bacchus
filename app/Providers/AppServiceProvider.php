@@ -30,8 +30,7 @@ class AppServiceProvider extends ServiceProvider
             'Bacchus\Services\Registrar'
         );
 
-        $this->app->bind('crawler.factory', function ()
-        {
+        $this->app->bind('crawler.factory', function () {
             return new CrawlerFactory();
         });
     }

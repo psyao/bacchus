@@ -1,7 +1,6 @@
 <?php
 
-Route::get('/', function ()
-{
+Route::get('/', function () {
     return new \Illuminate\Http\RedirectResponse('recipes');
 });
 

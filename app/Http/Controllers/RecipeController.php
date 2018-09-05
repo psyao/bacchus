@@ -49,8 +49,7 @@ class RecipeController extends Controller
     {
         $recipe = Recipe::create($request->input());
 
-        if ( !isset($recipe->id))
-        {
+        if (!isset($recipe->id)) {
             flash()->error("The Recipe could not be saved!");
 
             return redirect()->back()->withInput();
@@ -83,8 +82,7 @@ class RecipeController extends Controller
     {
         $recipe = $recipe->import($request->input('url'));
 
-        if ( !isset($recipe->id))
-        {
+        if (!isset($recipe->id)) {
             flash()->error("The Recipe could not be imported!");
 
             return redirect()->back()->withInput();
@@ -129,8 +127,7 @@ class RecipeController extends Controller
      */
     public function update(RecipeRequest $request, Recipe $recipe)
     {
-        if ( !$recipe->update($request->input()))
-        {
+        if (!$recipe->update($request->input())) {
             flash()->error("The Recipe could not be updated!");
 
             return redirect()->back()->withInput();
@@ -151,8 +148,7 @@ class RecipeController extends Controller
      */
     public function destroy(Recipe $recipe)
     {
-        if ( !$recipe->delete())
-        {
+        if (!$recipe->delete()) {
             flash()->error("The Recipe could not be deleted!");
 
             return redirect()->back();

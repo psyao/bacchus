@@ -9,8 +9,7 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function name()
     {
-        if ( !isset($this->attributes['name']))
-        {
+        if (!isset($this->attributes['name'])) {
             $this->attributes['name'] = $this->text('section.recette_titre h1.fn');
         }
 
@@ -22,8 +21,7 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function preparationTime()
     {
-        if ( !isset($this->attributes['preparation_time']))
-        {
+        if (!isset($this->attributes['preparation_time'])) {
             $this->attributes['preparation_time'] = $this->integer('section.recette_infos span.preptime');
         }
 
@@ -35,8 +33,7 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function cookingTime()
     {
-        if ( !isset($this->attributes['cooking_time']))
-        {
+        if (!isset($this->attributes['cooking_time'])) {
             $this->attributes['cooking_time'] = $this->integer('section.recette_infos span.cooktime');
         }
 
@@ -56,8 +53,7 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function totalTime()
     {
-        if ( !isset($this->attributes['total_time']))
-        {
+        if (!isset($this->attributes['total_time'])) {
             $this->attributes['total_time'] = ($this->preparationTime() + $this->cookingTime());
         }
 
@@ -69,8 +65,7 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function guests()
     {
-        if ( !isset($this->attributes['guests']))
-        {
+        if (!isset($this->attributes['guests'])) {
             $this->attributes['guests'] = $this->integer('section.recette_infos span.yield');
         }
 
@@ -82,13 +77,11 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function difficulty()
     {
-        if ( !isset($this->attributes['difficulty']))
-        {
-            switch ($this->text('section.recette_infos > div:nth-child(2) > p:nth-child(3) > span:nth-child(2)'))
-            {
+        if (!isset($this->attributes['difficulty'])) {
+            switch ($this->text('section.recette_infos > div:nth-child(2) > p:nth-child(3) > span:nth-child(2)')) {
                 case 'très facile':
                 case 'facile':
-                $this->attributes['difficulty'] = Recipe::difficulties('easy');
+                    $this->attributes['difficulty'] = Recipe::difficulties('easy');
                     break;
                 case 'difficile':
                 case 'très difficile':
@@ -96,7 +89,7 @@ class SevenHundredAndFiftyGrams extends Crawler
                     break;
                 case 'moyen':
                 default:
-                $this->attributes['difficulty'] = Recipe::difficulties('medium');
+                    $this->attributes['difficulty'] = Recipe::difficulties('medium');
             }
         }
 
@@ -108,12 +101,10 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function price()
     {
-        if ( !isset($this->attributes['price']))
-        {
+        if (!isset($this->attributes['price'])) {
             $classes = explode(' ', $this->crawler->filter('section.recette_infos span.recette_cout > span')->attr('class'));
 
-            switch (end($classes))
-            {
+            switch (end($classes)) {
                 case 'cost_0':
                     $this->attributes['price'] = Recipe::prices('low');
                     break;
@@ -135,14 +126,12 @@ class SevenHundredAndFiftyGrams extends Crawler
      */
     protected function ingredients()
     {
-        if ( !isset($this->attributes['ingredients']))
-        {
+        if (!isset($this->attributes['ingredients'])) {
             $ingredients = [];
 
             $nodes = $this->crawler->filter('section.recette_ingredients li');
 
-            $nodes->each(function ($node, $i) use (&$ingredients)
-            {
+            $nodes->each(function ($node, $i) use (&$ingredients) {
                 $ingredients[]['body'] = trim($node->text());
             });
 
