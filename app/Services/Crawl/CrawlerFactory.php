@@ -9,8 +9,7 @@ class CrawlerFactory
      */
     public function make($url)
     {
-        $instance = array_first(config('recipes.crawlers'), function ($key, $value) use ($url)
-        {
+        $instance = array_first(config('recipes.crawlers'), function ($key, $value) use ($url) {
             return str_contains($url, $key);
         });
 

@@ -34,8 +34,7 @@ class Recipe extends Model
      */
     public static function difficulties($key = null)
     {
-        if ( !is_null($key))
-        {
+        if (!is_null($key)) {
             return array_get(self::$difficulties, $key, false);
         }
 
@@ -49,8 +48,7 @@ class Recipe extends Model
      */
     public static function prices($key = null)
     {
-        if ( !is_null($key))
-        {
+        if (!is_null($key)) {
             return array_get(self::$prices, $key, false);
         }
 
@@ -66,8 +64,7 @@ class Recipe extends Model
     {
         $created = parent::create($attributes);
 
-        if ($created && isset($attributes['ingredients']))
-        {
+        if ($created && isset($attributes['ingredients'])) {
             $created->persistIngredients($attributes['ingredients'])
                     ->persistSteps($attributes['steps']);
         }
@@ -96,8 +93,7 @@ class Recipe extends Model
     {
         $updated = parent::update($attributes);
 
-        if ($updated && isset($attributes['ingredients']))
-        {
+        if ($updated && isset($attributes['ingredients'])) {
             $updated->persistIngredients($attributes['ingredients'])
                     ->persistSteps($attributes['steps']);
         }
@@ -140,20 +136,16 @@ class Recipe extends Model
      */
     protected function persistIngredients(array $ingredients)
     {
-        if ($this->exists)
-        {
-            foreach ($this->ingredients as $ingredient)
-            {
+        if ($this->exists) {
+            foreach ($this->ingredients as $ingredient) {
                 isset($ingredients[$ingredient->id])
                     ? $ingredient->update(array_pull($ingredients, $ingredient->id))
                     : $ingredient->delete();
             }
         }
 
-        foreach ($ingredients as $attributes)
-        {
-            if ( !empty($attributes['body']))
-            {
+        foreach ($ingredients as $attributes) {
+            if (!empty($attributes['body'])) {
                 $this->ingredients()->save(new Ingredient($attributes));
             }
         }
@@ -168,20 +160,16 @@ class Recipe extends Model
      */
     protected function persistSteps(array $steps)
     {
-        if ($this->exists)
-        {
-            foreach ($this->steps as $step)
-            {
+        if ($this->exists) {
+            foreach ($this->steps as $step) {
                 isset($steps[$step->id])
                     ? $step->update(array_pull($steps, $step->id))
                     : $step->delete();
             }
         }
 
-        foreach ($steps as $attributes)
-        {
-            if ( !empty($attributes['body']))
-            {
+        foreach ($steps as $attributes) {
+            if (!empty($attributes['body'])) {
                 $this->steps()->save(new Step($attributes));
             }
         }
@@ -194,13 +182,11 @@ class Recipe extends Model
      */
     protected function slugify()
     {
-        if ( !isset($this->attributes['slug']) || empty($this->attributes['slug']))
-        {
+        if (!isset($this->attributes['slug']) || empty($this->attributes['slug'])) {
             $slug     = str_slug($this->attributes['name']);
             $lastSlug = static::whereRaw("slug REGEXP '^{$slug}(-[0-9]*)?$'")->orderBy('slug', 'desc')->first();
 
-            if (isset($lastSlug->slug))
-            {
+            if (isset($lastSlug->slug)) {
                 $slug = "{$slug}-" . ((intval(str_replace("{$slug}-", '', $lastSlug->slug))) + 1);
             }
 

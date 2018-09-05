@@ -9,8 +9,7 @@ class CuisineAZ extends Crawler
      */
     protected function name()
     {
-        if ( !isset($this->attributes['name']))
-        {
+        if (!isset($this->attributes['name'])) {
             $this->attributes['name'] = $this->text('h1.recetteH1');
         }
 
@@ -22,8 +21,7 @@ class CuisineAZ extends Crawler
      */
     protected function preparationTime()
     {
-        if ( !isset($this->attributes['preparation_time']))
-        {
+        if (!isset($this->attributes['preparation_time'])) {
             $this->attributes['preparation_time'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteTempsPrepa');
         }
 
@@ -35,8 +33,7 @@ class CuisineAZ extends Crawler
      */
     protected function cookingTime()
     {
-        if ( !isset($this->attributes['cooking_time']))
-        {
+        if (!isset($this->attributes['cooking_time'])) {
             $this->attributes['cooking_time'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteTempsCuisson');
         }
 
@@ -48,8 +45,7 @@ class CuisineAZ extends Crawler
      */
     protected function restTime()
     {
-        if ( !isset($this->attributes['rest_time']))
-        {
+        if (!isset($this->attributes['rest_time'])) {
             $this->attributes['rest_time'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteTempsRepos');
         }
 
@@ -61,8 +57,7 @@ class CuisineAZ extends Crawler
      */
     protected function totalTime()
     {
-        if ( !isset($this->attributes['total_time']))
-        {
+        if (!isset($this->attributes['total_time'])) {
             $this->attributes['total_time'] = ($this->preparationTime() + $this->cookingTime() + $this->restTime());
         }
 
@@ -74,8 +69,7 @@ class CuisineAZ extends Crawler
      */
     protected function guests()
     {
-        if ( !isset($this->attributes['guests']))
-        {
+        if (!isset($this->attributes['guests'])) {
             $this->attributes['guests'] = $this->integer('#ctl00_ContentPlaceHolder_LblRecetteNombre');
         }
 
@@ -87,8 +81,7 @@ class CuisineAZ extends Crawler
      */
     protected function difficulty()
     {
-        if ( !isset($this->attributes['difficulty']))
-        {
+        if (!isset($this->attributes['difficulty'])) {
             // The value is always a string
             $this->attributes['difficulty'] = $this->getDifficultyIndex($this->text('td.cazicon-difficult'));
         }
@@ -101,8 +94,7 @@ class CuisineAZ extends Crawler
      */
     protected function price()
     {
-        if ( !isset($this->attributes['price']))
-        {
+        if (!isset($this->attributes['price'])) {
             $this->attributes['price'] = $this->getPriceIndex($this->integer('td.cazicon-coutFR', false));
         }
 
@@ -114,14 +106,12 @@ class CuisineAZ extends Crawler
      */
     protected function ingredients()
     {
-        if ( !isset($this->attributes['ingredients']))
-        {
+        if (!isset($this->attributes['ingredients'])) {
             $ingredients = [];
 
             $nodes = $this->crawler->filter('#ingredients > ul > li.ingredient > span');
 
-            $nodes->each(function ($node, $i) use (&$ingredients)
-            {
+            $nodes->each(function ($node, $i) use (&$ingredients) {
                 $text = explode(' : ', trim($node->text()));
                 $ingredients[]['body'] = strip_tags(trim(implode(' ', array_reverse($text))));
             });
@@ -151,13 +141,10 @@ class CuisineAZ extends Crawler
     {
         $value /= $this->guests();
 
-        if ($value <= 6)
-        {
+        if ($value <= 6) {
             // Less or equals to 4€ per guest
             return Recipe::prices('low');
-        }
-        elseif ($value <= 9)
-        {
+        } elseif ($value <= 9) {
             // More than 4€ but less than 6€ per guest
             return Recipe::prices('medium');
         }
@@ -173,8 +160,7 @@ class CuisineAZ extends Crawler
      */
     protected function evaluateTextPriceIndex($value)
     {
-        switch ($value)
-        {
+        switch ($value) {
             case 'Pas cher':
                 $index = Recipe::prices('low');
                 break;
@@ -196,8 +182,7 @@ class CuisineAZ extends Crawler
      */
     protected function getDifficultyIndex($value)
     {
-        switch ($value)
-        {
+        switch ($value) {
             case 'Facile':
                 $difficulty = Recipe::difficulties('easy');
                 break;

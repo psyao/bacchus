@@ -2,8 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ingredient extends Model {
+class Ingredient extends Model
+{
 
-	protected $fillable = ['body'];
-
+    protected $fillable = ['body'];
 }
